@@ -21,6 +21,9 @@ export default function CameraDetails() {
         video: {
           width: 500,
           height: 500,
+          facingMode: {
+            exact: "environment",
+          },
         },
       })
       .then((stream) => {
