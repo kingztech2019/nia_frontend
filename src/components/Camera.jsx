@@ -152,7 +152,11 @@ export default function CameraDetails() {
     <NavBar>
       <div className="lg:px- max-w-screen-sm">
         <div className="text-center">
-          <video className="w-96 h-64" ref={videoRef}></video>
+          <video
+            playsInline="true"
+            className="w-96 h-64"
+            ref={videoRef}
+          ></video>
         </div>
         <div className="lg:pl-20">
           {active == 0 && (
