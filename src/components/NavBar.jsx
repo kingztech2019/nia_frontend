@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./NavBar.css";
-// import axios from "axios";
+import axios from "axios";
+import TawkTo from "tawkto-react";
 
 const NavBar = (props) => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const propertyId = process.env.REACT_APP_PROPERTY_ID;
+    const tawkId = process.env.REACT_APP_TAWK_ID;
+    var tawk = new TawkTo(propertyId, tawkId);
+
+    tawk.onStatusChange((status) => {
+      console.log("STATUS", status);
+    });
+  }, []);
   // const logOut = () => {
   //   axios
   //     .post(
@@ -27,21 +37,23 @@ const NavBar = (props) => {
   // };
   return (
     <>
-      <div className="bg-white h-16">
+      <div className="bg-white h-16 hidden lg:block">
         <div className="flex justify-between items-center">
           <div>
             <img src="/image.svg" className="w-64" />
           </div>
-          <div>logout icon</div>
+          <div className="hidden pr-11 lg:block">
+            <img src="/logout.png" />
+          </div>
         </div>
       </div>
       <div
-        className="relative bg-[#FAFAF8]  min-h-screen md:flex"
+        className="relative bg-[#FAFAF8] min-h-screen md:flex"
         data-dev-hint="container"
       >
         <input type="checkbox" id="menu-open" className="hidden" />
 
-        <label
+        {/* <label
           for="menu-open"
           className="absolute right-2 bottom-2 shadow-lg rounded-full p-2 bg-gray-100 text-gray-600 md:hidden"
           data-dev-hint="floating action button"
@@ -60,16 +72,30 @@ const NavBar = (props) => {
               d="M4 6h16M4 12h16M4 18h16"
             />
           </svg>
-        </label>
+        </label> */}
 
         <header
-          className="bg-gray-600 text-gray-100 flex justify-between md:hidden"
+          className="bg-white text-gray-100 flex justify-between md:hidden"
           data-dev-hint="mobile menu bar"
         >
+          <div className="flex justify-between items-center">
+            <div>
+              <img src="/image.svg" className="w-64" />
+            </div>
+            <div className="hidden lg:block">
+              <img src="/logout.png" />
+            </div>
+          </div>
+
+          <a
+            href="#"
+            className="block p-4 text-white font-bold whitespace-nowrap truncate"
+          ></a>
+
           <label
             for="menu-open"
             id="mobile-menu-button"
-            className="m-2 p-2 focus:outline-none hover:text-white hover:bg-gray-700 rounded-md"
+            className="m-2 p-2 focus:outline-none bg-gray-700 hover:text-white hover:bg-gray-700 rounded-md"
           >
             <svg
               id="menu-open-icon"
@@ -106,7 +132,7 @@ const NavBar = (props) => {
 
         <aside
           id="sidebar"
-          className="bg-white border-r h-screen border-gray-50 shadow text-gray-100 md:w-64 w-3/4 space-y-6 pt-6 px-0 absolute inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out  md:flex md:flex-col md:justify-between overflow-y-hidden"
+          className="bg-white border-r shadow  z-50 h-screen text-gray-100 md:w-64 w-3/4 space-y-6 pt-6 px-0 absolute inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out  md:flex md:flex-col md:justify-between overflow-y-auto"
           data-dev-hint="sidebar; px-0 for frameless; px-2 for visually inset the navigation"
         >
           <div
@@ -115,7 +141,7 @@ const NavBar = (props) => {
           >
             <nav data-dev-hint="main navigation">
               <a
-                href="/"
+                href="#"
                 className="flex items-center space-x-2 py-2 px-4 transition duration-200 text-blue-900"
               >
                 <svg
@@ -138,7 +164,7 @@ const NavBar = (props) => {
               </a>
 
               <a
-                href="/transaction"
+                href="#"
                 className="flex items-center space-x-2 py-2 px-4 transition duration-200 text-black"
               >
                 <svg
@@ -159,22 +185,21 @@ const NavBar = (props) => {
                 </svg>
                 <span className="text-xl ">Contact N/A</span>
               </a>
-
-              <div
-                //onClick={logOut}
-                className="items-center pt-72"
-              >
-                <div>
-                  <div className="text-black pl-4">Powered By:</div>
-                  <img src="/octamile.png" />
-                </div>
-              </div>
             </nav>
+          </div>
+          <div
+            //onClick={logOut}
+            className="items-center pt-60 lg:pb-16 lg:pt-0"
+          >
+            <div>
+              <div className="text-black pl-4">Powered By:</div>
+              <img src="/octamile.png" />
+            </div>
           </div>
         </aside>
 
-        <main id="content" className="flex-1 p-6 lg:px-8 bg-[#FAFAF8]">
-          <div className="max-w-7xl mx-auto ">{props.children}</div>
+        <main id="content" className="flex-1 p-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">{props.children}</div>
         </main>
       </div>
     </>

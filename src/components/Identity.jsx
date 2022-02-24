@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "./NavBar";
 import PersonalDetails from "./PersonalDetails";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Identity = () => {
+  const navigate = useNavigate();
   const [licenseData, setLicenseData] = useState();
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState();
@@ -41,6 +43,13 @@ const Identity = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <NavBar>

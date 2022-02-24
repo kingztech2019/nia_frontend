@@ -1,12 +1,55 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+
+    try {
+      const body = {
+        email: data.email,
+        password: data.password,
+      };
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/public/login`,
+        { ...body }
+      );
+      localStorage.setItem("jwt", response?.data?.token);
+      navigate("/home");
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
   const handleShow = () => {
     setShow(!show);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      navigate("/home");
+    }
+  }, []);
   return (
-    <form className="p-4 max-w-md mx-auto bg-white  mt-10 rounded">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="p-4 max-w-md mx-auto bg-white  mt-10 rounded"
+    >
       <div className="text-center">
         <img src="/image.svg" />
       </div>
@@ -23,6 +66,9 @@ export default function Login() {
         type="text"
         autocomplete="off"
         autofocus
+        {...register("email", {
+          required: false,
+        })}
       />
 
       <label
@@ -55,14 +101,17 @@ export default function Login() {
           id="password"
           type={show ? "text" : "password"}
           autocomplete="off"
+          {...register("password", {
+            required: false,
+          })}
         />
       </div>
 
       <button
+        disabled={loading ? true : false}
         className="w-full bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-3 px-4 mt-10 rounded focus:outline-none focus:shadow-outline"
-        type="button"
       >
-        Sign in
+        {loading ? "Loading" : "Sign in"}
       </button>
       <div className="text-right cursor-pointer pt-2">Forgot Password?</div>
     </form>
