@@ -155,7 +155,7 @@ export default function CameraDetails() {
         console.log(response);
       })
       .catch(function (error) {
-        alert("Errro", error);
+        alert("Errro", error.response);
         console.log(error);
       });
   };
