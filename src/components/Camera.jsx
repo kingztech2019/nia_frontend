@@ -171,6 +171,7 @@ export default function CameraDetails() {
   return (
     <NavBar>
       <div className=" max-w-screen-sm">
+        {image.firstimage}
         <ToastContainer
           position="bottom-right"
           autoClose={7000}
