@@ -142,7 +142,6 @@ export default function CameraDetails() {
         }
       )
       .then(function (response) {
-        alert("AM CLICKED");
         toast.success("Images uploaded successfully!", {
           position: "bottom-right",
           autoClose: 5000,
@@ -170,8 +169,7 @@ export default function CameraDetails() {
   };
   return (
     <NavBar>
-      <div className=" max-w-screen-sm">
-        {image.firstimage}
+      <div className="lg:px- max-w-screen-sm">
         <ToastContainer
           position="bottom-right"
           autoClose={7000}
