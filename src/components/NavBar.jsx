@@ -15,6 +15,11 @@ const NavBar = (props) => {
       console.log("STATUS", status);
     });
   }, []);
+
+  const logOut = () => {
+    localStorage.removeItem("jwt");
+    navigate("/");
+  };
   // const logOut = () => {
   //   axios
   //     .post(
@@ -42,7 +47,10 @@ const NavBar = (props) => {
           <div>
             <img src="/image.svg" className="w-64" />
           </div>
-          <div className="hidden pr-11 lg:block">
+          <div
+            onClick={logOut}
+            className="hidden cursor-pointer pr-11 lg:block"
+          >
             <img src="/logout.png" />
           </div>
         </div>
@@ -82,7 +90,7 @@ const NavBar = (props) => {
             <div>
               <img src="/image.svg" className="w-64" />
             </div>
-            <div className="hidden lg:block">
+            <div onClick={logOut} className="hidden lg:block">
               <img src="/logout.png" />
             </div>
           </div>

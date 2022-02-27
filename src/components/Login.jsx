@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [message, setMessage] = useState();
   const navigate = useNavigate();
 
   const {
@@ -31,7 +31,8 @@ export default function Login() {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      setMessage(error?.response?.data?.message);
+      console.log(error?.response?.data?.message);
     }
   };
 
@@ -66,10 +67,14 @@ export default function Login() {
         type="text"
         autocomplete="off"
         autofocus
+        required
         {...register("email", {
-          required: false,
+          required: true,
         })}
       />
+      <div className="italic text-xs text-red-600 pt-1">
+        {errors.email?.type === "required" && "Password is required"}
+      </div>
 
       <label
         className="font-medium block mb-1 mt-6 text-gray-700"
@@ -101,10 +106,15 @@ export default function Login() {
           id="password"
           type={show ? "text" : "password"}
           autocomplete="off"
+          required
           {...register("password", {
-            required: false,
+            required: true,
           })}
         />
+        <div className="italic text-xs text-red-600 pt-1">
+          {errors.password?.type === "required" && "Password is required"}
+          {message}
+        </div>
       </div>
 
       <button

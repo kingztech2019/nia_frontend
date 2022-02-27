@@ -44,6 +44,33 @@ const Personaldetails = ({ formData }) => {
 
   const onSubmit = (data) => {
     setRegNo(data.vin);
+    const {
+      first_name,
+      last_name,
+      means_of_id,
+      id,
+      middle_name,
+      phone_number,
+      email,
+      state,
+      lga,
+      address,
+      title,
+    } = data;
+
+    const body = {
+      first_name,
+      last_name,
+      means_of_id,
+      id,
+      middle_name,
+      phone_number,
+      email,
+      state,
+      lga,
+      address,
+      title,
+    };
     const token = localStorage.getItem("jwt");
     setLoading(true);
     const headers = {
@@ -54,7 +81,7 @@ const Personaldetails = ({ formData }) => {
     const reqOne = axios({
       method: "post",
       url: `${process.env.REACT_APP_BACKEND_URL}/private/personal-details`,
-      data: { ...data },
+      data: { ...body },
       headers: headers,
     });
 
@@ -124,17 +151,6 @@ const Personaldetails = ({ formData }) => {
         // always executed
       });
   };
-  // const {address,
-  //   date_of_birth,
-  //   expiry_date,
-  //   first_name,
-  //   gender,
-  //   id,
-  //   image,
-  //   last_name,
-  //   license,
-  //   middle_name,
-  //   phone_number} = data
 
   return (
     <>
@@ -175,7 +191,7 @@ const Personaldetails = ({ formData }) => {
                     readOnly="true"
                     //ref={register}
                     disabled={disabled}
-                    {...register("license", {
+                    {...register("means_of_id", {
                       required: false,
                     })}
                   />

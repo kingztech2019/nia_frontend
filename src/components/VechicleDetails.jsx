@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import NavBar from "./NavBar";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 export default function VechicleDetails({ vinData, regNo }) {
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState();
   const [formData, setFormData] = useState();
@@ -11,6 +13,7 @@ export default function VechicleDetails({ vinData, regNo }) {
   const [statesList, setStatesList] = useState();
   const [lgaList, setLgaList] = useState();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState();
   const {
     register,
     handleSubmit,
@@ -24,6 +27,43 @@ export default function VechicleDetails({ vinData, regNo }) {
 
   const onSubmit = async (data) => {
     setLoading(true);
+    const {
+      reg_no,
+      vin,
+      engine,
+      vechicle_color,
+      model,
+      value,
+      capacity,
+      make,
+      policy_holder,
+      phone_number,
+      email,
+      company,
+      state,
+      nin,
+      lga,
+      address,
+    } = data;
+    const body = {
+      reg_no,
+      vin,
+      engine,
+      vechicle_color,
+      model,
+      value,
+      capacity,
+      make,
+      policy_holder,
+      phone_number,
+      email,
+      company,
+      state,
+      nin,
+      lga,
+      address,
+    };
+
     const token = localStorage.getItem("jwt");
     const headers = {
       "content-type": "application/json",
@@ -33,13 +73,14 @@ export default function VechicleDetails({ vinData, regNo }) {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/private/all-details`,
-        { ...data },
+        { ...body },
         {
           headers: headers,
         }
       );
+      localStorage.setItem("identity", response.data?.identity);
 
-      console.log(response);
+      navigate("/mobile");
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -108,6 +149,7 @@ export default function VechicleDetails({ vinData, regNo }) {
         // always executed
       });
   };
+
   return (
     <>
       <div className="pb-2">

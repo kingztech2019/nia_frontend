@@ -2,6 +2,9 @@ import React, { useState, useEffect, Fragment, useRef } from "react";
 import NavBar from "./NavBar";
 import axios from "axios";
 import { Camera } from "react-cam";
+import SuccessPage from "./SuccessPage";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function CameraDetails() {
   const videoRef = useRef(null);
   const phoneRef = useRef(null);
@@ -14,6 +17,7 @@ export default function CameraDetails() {
     thirdimage: "",
     fourthimage: "",
   });
+  const [status, setStatus] = useState();
   const [active, setActive] = useState(0);
   const [disabled, setDisabled] = useState(true);
   // function handleTakePhoto(dataUri) {
@@ -28,9 +32,9 @@ export default function CameraDetails() {
         video: {
           width: 500,
           height: 500,
-          facingMode: {
-            exact: "environment",
-          },
+          // facingMode: {
+          //   exact: "environment",
+          // },
         },
       })
       .then((stream) => {
@@ -122,7 +126,7 @@ export default function CameraDetails() {
     if (code) {
       setIdCode(code);
     }
-  });
+  }, []);
   const postImages = () => {
     const payload = {
       firstimage: image.firstimage,
@@ -138,6 +142,15 @@ export default function CameraDetails() {
         }
       )
       .then(function (response) {
+        toast.success("Images uploaded successfully!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         console.log(response);
       })
       .catch(function (error) {
@@ -148,9 +161,25 @@ export default function CameraDetails() {
     setActive(active + 1);
     setDisabled(true);
   };
+
+  const handleBack = () => {
+    setActive(active - 1);
+    setDisabled(false);
+  };
   return (
     <NavBar>
       <div className="lg:px- max-w-screen-sm">
+        <ToastContainer
+          position="bottom-right"
+          autoClose={7000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <div className="text-center">
           <video
             playsInline="true"
@@ -247,10 +276,7 @@ export default function CameraDetails() {
           <div className="flex justify-between pt-6">
             <div>
               {active !== 0 && (
-                <button
-                  className="text-indigo-700"
-                  onClick={() => setActive(active - 1)}
-                >
+                <button className="text-indigo-700" onClick={handleBack}>
                   Back
                 </button>
               )}

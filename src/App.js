@@ -1,5 +1,6 @@
+import React, { useEffect, useState } from "react";
 import Login from "./components/Login";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./components/Home";
 import InsuranceCompany from "./components/InsuranceCompany";
 import Identity from "./components/Identity";
@@ -7,8 +8,48 @@ import Personaldetails from "./components/PersonalDetails";
 import VechicleDetails from "./components/VechicleDetails";
 import PolicyDetails from "./components/PolicyDetails";
 import CameraDetails from "./components/Camera";
+import SuccessPage from "./components/SuccessPage";
+import MobileScreen from "./components/MobileScreen";
+import axios from "axios";
 
 function App() {
+  const [status, setStatus] = useState();
+  const [idCode, setIdCode] = useState();
+  const navigate = useNavigate();
+  const statusTimeout = setInterval(getStatus, 20000);
+
+  async function getStatus() {
+    const token = localStorage.getItem("jwt");
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/private/status-check?id=${idCode}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setStatus(response?.data?.status?.UploadStatus);
+      if (response?.data?.status?.UploadStatus == "active") {
+        navigate("/success");
+      }
+
+      console.log();
+      //setLoading(false);
+    } catch (error) {
+      console.log(error);
+      // setLoading(false);
+    }
+  }
+  useEffect(() => {
+    const identityCode = localStorage.getItem("identity");
+    setIdCode(identityCode);
+    if (identityCode) {
+      getStatus();
+    }
+  }, [statusTimeout]);
+
   return (
     <Routes>
       <Route exact path="/home" element={<Home />} />
@@ -19,6 +60,12 @@ function App() {
       <Route exact path="/vechicle" element={<VechicleDetails />} />
       <Route exact path="/policy" element={<PolicyDetails />} />
       <Route exact path="/camera" element={<CameraDetails />} />
+      <Route
+        exact
+        path="/success"
+        element={<SuccessPage statusTimeout={statusTimeout} />}
+      />
+      <Route exact path="/mobile" element={<MobileScreen />} />
     </Routes>
   );
 }

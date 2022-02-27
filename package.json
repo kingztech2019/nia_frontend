@@ -16,6 +16,7 @@
     "react-html5-camera-photo": "^1.5.5",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
+    "react-toastify": "^8.2.0",
     "tawkto-react": "^3.0.1",
     "web-vitals": "^2.1.4"
   },

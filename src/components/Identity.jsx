@@ -51,6 +51,10 @@ const Identity = () => {
     }
   }, []);
 
+  // function getAlerts() {
+  //   console.log("CALLED");
+  // }
+
   return (
     <NavBar>
       {show ? (
