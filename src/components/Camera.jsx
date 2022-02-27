@@ -128,7 +128,6 @@ export default function CameraDetails() {
     }
   }, []);
   const postImages = () => {
-    alert("AM CLICKED");
     const payload = {
       firstimage: image.firstimage,
       secondimage: image.secondimage,
@@ -143,6 +142,7 @@ export default function CameraDetails() {
         }
       )
       .then(function (response) {
+        alert("AM CLICKED");
         toast.success("Images uploaded successfully!", {
           position: "bottom-right",
           autoClose: 5000,
