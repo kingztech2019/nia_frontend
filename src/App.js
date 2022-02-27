@@ -17,7 +17,7 @@ function App() {
   const [idCode, setIdCode] = useState();
   const navigate = useNavigate();
   const statusTimeout = setInterval(() => getStatus, 20000);
-  console.log(statusTimeout);
+
   async function getStatus() {
     const token = localStorage.getItem("jwt");
     try {
