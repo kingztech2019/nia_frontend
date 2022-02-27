@@ -128,6 +128,7 @@ export default function CameraDetails() {
     }
   }, []);
   const postImages = () => {
+    alert("AM CLICKED");
     const payload = {
       firstimage: image.firstimage,
       secondimage: image.secondimage,
@@ -168,7 +169,7 @@ export default function CameraDetails() {
   };
   return (
     <NavBar>
-      <div className="lg:px- max-w-screen-sm">
+      <div className=" max-w-screen-sm">
         <ToastContainer
           position="bottom-right"
           autoClose={7000}
@@ -182,7 +183,7 @@ export default function CameraDetails() {
         />
         <div className="text-center">
           <video
-            playsInline="true"
+            playsInline={true}
             className="w-96 h-64"
             ref={videoRef}
           ></video>
