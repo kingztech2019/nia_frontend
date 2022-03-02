@@ -338,7 +338,7 @@ export default function VechicleDetails({ vinData, regNo, value }) {
                   className="appearance-none border-2 rounded w-full py-2 px-3 leading-tight border-gray-300 focus:outline-none focus:border-indigo-700 focus:bg-white   pr-16 font-mono"
                   type="text"
                   autocomplete="off"
-                  defaultValue={value?.value}
+                  defaultValue={value}
                   autofocus
                   disabled={disabled}
                   select
