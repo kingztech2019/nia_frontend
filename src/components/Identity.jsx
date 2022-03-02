@@ -4,6 +4,8 @@ import PersonalDetails from "./PersonalDetails";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Identity = () => {
   const navigate = useNavigate();
   const [licenseData, setLicenseData] = useState();
@@ -40,7 +42,17 @@ const Identity = () => {
       setLoading(false);
       setShow(true);
     } catch (error) {
-      console.error(error);
+      toast.error(error.response?.data?.message, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setLoading(false);
+      //console.error(error.response);
     }
   };
 
@@ -62,6 +74,17 @@ const Identity = () => {
       ) : (
         <>
           <div className="inline-flex items-center pl-9 pb-4">
+            <ToastContainer
+              position="bottom-right"
+              autoClose={7000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
             <span>
               <img src="/left.svg" />
             </span>

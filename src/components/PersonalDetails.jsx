@@ -3,52 +3,61 @@ import NavBar from "./NavBar";
 import axios from "axios";
 import VechicleDetails from "./VechicleDetails";
 import { useForm } from "react-hook-form";
+import NaijaStates from "naija-state-local-government";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Personaldetails = ({ formData }) => {
   const [disabled, setDisabled] = useState(true);
   const [showForm, setShowForm] = useState(true);
   const [showVechicle, setShowVechicle] = useState(false);
-  const [regNo, setRegNo] = useState();
+  const [regNo, setRegNo] = useState({
+    vin: "",
+    plateno: "",
+  });
   const [vinData, setVinData] = useState();
   const [statesList, setStatesList] = useState();
-  const [lgaList, setLgaList] = useState();
+  const [lgaList, setLgaList] = useState("lagos");
   const [loading, setLoading] = useState(false);
+  const [value, setValue] = useState();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { ...formData, title: "mr" } });
+  } = useForm({
+    defaultValues: { ...formData, id_code: formData.id, title: "mr" },
+  });
 
   const handleEdit = (e) => {
     e.preventDefault();
     setDisabled(false);
   };
 
-  const getAllStates = () => {
-    axios
-      .get("http://locationsng-api.herokuapp.com/api/v1/states")
-      .then(function (response) {
-        setStatesList(response?.data);
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
-  };
+  // const getAllStates = () => {
+  //   axios
+  //     .get("http://locationsng-api.herokuapp.com/api/v1/states")
+  //     .then(function (response) {
+  //       setStatesList(response?.data);
+  //       console.log(response);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     })
+  //     .then(function () {
+  //       // always executed
+  //     });
+  // };
 
-  useEffect(() => {
-    getAllStates();
-  }, []);
+  // useEffect(() => {
+  //   getAllStates();
+  // }, []);
 
   const onSubmit = (data) => {
-    setRegNo(data.vin);
+    setRegNo({ ...regNo, vin: data.vin, plateno: data.plate_no });
     const {
       first_name,
       last_name,
       means_of_id,
-      id,
+      id_code,
       middle_name,
       phone_number,
       email,
@@ -62,7 +71,7 @@ const Personaldetails = ({ formData }) => {
       first_name,
       last_name,
       means_of_id,
-      id,
+      id_code,
       middle_name,
       phone_number,
       email,
@@ -87,12 +96,11 @@ const Personaldetails = ({ formData }) => {
 
     const reqTwo = axios({
       method: "post",
-      url: "https://autorescue.ng/dealer/v2/vinprev",
+      url: `${process.env.REACT_APP_BACKEND_URL}/private/get-vin-details`,
       data: {
         vin: data.vin,
-        email: "tester",
-        password: "tester",
       },
+      headers: headers,
     });
 
     axios
@@ -102,7 +110,9 @@ const Personaldetails = ({ formData }) => {
           const [resOne, resTwo] = responses;
           console.log("THIS", resOne);
 
-          setVinData(resTwo?.data);
+          setVinData(JSON.parse(resTwo?.data?.data?.firstcheck));
+          setValue(JSON.parse(resTwo?.data?.data?.finalcheck));
+          //showVinDetails(resTwo?.data);
           setShowForm(false);
           setShowVechicle(true);
           setLoading(false);
@@ -111,10 +121,39 @@ const Personaldetails = ({ formData }) => {
       )
       .catch((errors) => {
         // react on errors.
+        toast.error("Opps! Something went wrong, Please try again", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         setLoading(false);
         console.log(errors);
       });
   };
+
+  // const showVinDetails = (data) => {
+  //   const body = {
+  //     make: data?.make,
+  //     model: data?.model,
+  //     year: data?.year,
+  //   };
+  //   axios
+  //     .post("https://truevalue.octamile.com/analysis2", { ...body })
+  //     .then(function (response) {
+  //       // setStatesList(response?.data);
+  //       console.log(response);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     })
+  //     .then(function () {
+  //       // always executed
+  //     });
+  // };
 
   // try {
   //   const body = {
@@ -137,24 +176,36 @@ const Personaldetails = ({ formData }) => {
   // console.log("NEW DATA", data);
 
   const handleChange = (e) => {
-    axios
-      .get(
-        `https://locationsng-api.herokuapp.com/api/v1/states/${e.target.value}/lgas`
-      )
-      .then(function (response) {
-        setLgaList(response?.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
+    setLgaList(e.target.value);
+    // axios
+    //   .get(
+    //     `https://locationsng-api.herokuapp.com/api/v1/states/${e.target.value}/lgas`
+    //   )
+    //   .then(function (response) {
+    //     setLgaList(response?.data);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   })
+    //   .then(function () {
+    //     // always executed
+    //   });
   };
 
   return (
     <>
       <div className="inline-flex items-center pl-9">
+        <ToastContainer
+          position="bottom-right"
+          autoClose={7000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <span>
           <img src="/left.svg" />
         </span>
@@ -210,7 +261,7 @@ const Personaldetails = ({ formData }) => {
                     autocomplete="off"
                     autofocus
                     disabled={disabled}
-                    {...register("id", {
+                    {...register("id_code", {
                       required: false,
                     })}
                   />
@@ -364,9 +415,9 @@ const Personaldetails = ({ formData }) => {
                     <option value="" selected>
                       State
                     </option>
-                    {statesList?.map((state, idx) => (
-                      <option key={idx} value={state?.name}>
-                        {state?.name}
+                    {NaijaStates.states()?.map((state, idx) => (
+                      <option key={idx} value={state}>
+                        {state}
                       </option>
                     ))}
                   </select>
@@ -404,7 +455,7 @@ const Personaldetails = ({ formData }) => {
                     <option value="" selected>
                       Selected
                     </option>
-                    {lgaList?.map((lga, i) => (
+                    {NaijaStates.lgas(lgaList)?.lgas?.map((lga, i) => (
                       <option value={lga}>{lga}</option>
                     ))}
                   </select>
@@ -473,6 +524,9 @@ const Personaldetails = ({ formData }) => {
                           autofocus
                           required
                           placeholder="Enter plate number"
+                          {...register("plate_no", {
+                            required: false,
+                          })}
                           //onChange={handleChange}
                         />
                         <div className="italic text-xs text-red-600 pt-1">
@@ -496,7 +550,7 @@ const Personaldetails = ({ formData }) => {
                           autocomplete="off"
                           autofocus
                           required
-                          placeholder="Enter plate number"
+                          placeholder="Enter VIN number"
                           {...register("vin", {
                             required: false,
                           })}
@@ -520,7 +574,7 @@ const Personaldetails = ({ formData }) => {
           </form>
           {showVechicle && (
             <div className="pt-10">
-              <VechicleDetails vinData={vinData} regNo={regNo} />
+              <VechicleDetails vinData={vinData} value={value} regNo={regNo} />
             </div>
           )}
         </div>

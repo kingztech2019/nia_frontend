@@ -151,10 +151,8 @@ export default function CameraDetails() {
           draggable: true,
           progress: undefined,
         });
-        console.log(response);
       })
       .catch(function (error) {
-        alert("Errro", image.firstimage);
         console.log(error);
       });
   };

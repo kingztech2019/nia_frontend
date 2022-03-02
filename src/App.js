@@ -16,13 +16,14 @@ function App() {
   const [status, setStatus] = useState();
   const [idCode, setIdCode] = useState();
   const navigate = useNavigate();
-  const statusTimeout = setInterval(() => getStatus, 20000);
+  //const statusTimeout = setInterval(() => getStatus, 20000);
 
   async function getStatus() {
     const token = localStorage.getItem("jwt");
+    const identityCode = localStorage.getItem("identity");
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/private/status-check?id=${idCode}`,
+        `${process.env.REACT_APP_BACKEND_URL}/private/status-check?id=${identityCode}`,
 
         {
           headers: {
@@ -42,13 +43,27 @@ function App() {
       // setLoading(false);
     }
   }
+  // useEffect(() => {
+  //   const identityCode = localStorage.getItem("identity");
+  //   setIdCode(identityCode);
+  //   if (identityCode) {
+  //     getStatus();
+  //   }
+  // }, [statusTimeout]);
+
   useEffect(() => {
-    const identityCode = localStorage.getItem("identity");
-    setIdCode(identityCode);
-    if (identityCode) {
-      getStatus();
-    }
-  }, [statusTimeout]);
+    // const token = localStorage.getItem("jwt");
+    // if (token) {
+    //   navigate("/home");
+    // }
+    const interval = setInterval(() => {
+      const identityCode = localStorage.getItem("identity");
+      if (identityCode) {
+        getStatus();
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [idCode]);
 
   return (
     <Routes>
@@ -60,11 +75,7 @@ function App() {
       <Route exact path="/vechicle" element={<VechicleDetails />} />
       <Route exact path="/policy" element={<PolicyDetails />} />
       <Route exact path="/camera" element={<CameraDetails />} />
-      <Route
-        exact
-        path="/success"
-        element={<SuccessPage statusTimeout={statusTimeout} />}
-      />
+      <Route exact path="/success" element={<SuccessPage />} />
       <Route exact path="/mobile" element={<MobileScreen />} />
     </Routes>
   );

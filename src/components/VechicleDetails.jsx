@@ -3,7 +3,8 @@ import NavBar from "./NavBar";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-export default function VechicleDetails({ vinData, regNo }) {
+import NaijaStates from "naija-state-local-government";
+export default function VechicleDetails({ vinData, regNo, value }) {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState();
@@ -11,14 +12,16 @@ export default function VechicleDetails({ vinData, regNo }) {
   const [showForm, setShowForm] = useState(true);
   const [disabled, setDisabled] = useState(true);
   const [statesList, setStatesList] = useState();
-  const [lgaList, setLgaList] = useState();
+  const [lgaList, setLgaList] = useState("lagos");
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState();
+  const [showMore, setShowMore] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { ...vinData, vin: regNo } });
+  } = useForm({
+    defaultValues: { ...vinData, vin: regNo.vin, plate_no: regNo.plate_no },
+  });
 
   // const handleChange = (e) => {
   //   setFormData({ ...formData, vin: e.target.value });
@@ -28,7 +31,7 @@ export default function VechicleDetails({ vinData, regNo }) {
   const onSubmit = async (data) => {
     setLoading(true);
     const {
-      reg_no,
+      plate_no,
       vin,
       engine,
       vechicle_color,
@@ -46,7 +49,7 @@ export default function VechicleDetails({ vinData, regNo }) {
       address,
     } = data;
     const body = {
-      reg_no,
+      plate_no,
       vin,
       engine,
       vechicle_color,
@@ -115,39 +118,27 @@ export default function VechicleDetails({ vinData, regNo }) {
   //   }
   // };
 
-  const getAllStates = () => {
-    axios
-      .get("http://locationsng-api.herokuapp.com/api/v1/states")
-      .then(function (response) {
-        setStatesList(response?.data);
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
-  };
+  // const getAllStates = () => {
+  //   axios
+  //     .get("http://locationsng-api.herokuapp.com/api/v1/states")
+  //     .then(function (response) {
+  //       setStatesList(response?.data);
+  //       console.log(response);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     })
+  //     .then(function () {
+  //       // always executed
+  //     });
+  // };
 
-  useEffect(() => {
-    getAllStates();
-  }, []);
+  // useEffect(() => {
+  //   getAllStates();
+  // }, []);
 
   const handleChange = (e) => {
-    axios
-      .get(
-        `https://locationsng-api.herokuapp.com/api/v1/states/${e.target.value}/lgas`
-      )
-      .then(function (response) {
-        setLgaList(response?.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
+    setLgaList(e.target.value);
   };
 
   return (
@@ -177,6 +168,7 @@ export default function VechicleDetails({ vinData, regNo }) {
                   autofocus
                   required
                   name="reg_no"
+                  defaultValue={regNo.plateno}
                   placeholder="Enter plate number"
                   disabled={disabled}
                   {...register("reg_no", {
@@ -186,7 +178,7 @@ export default function VechicleDetails({ vinData, regNo }) {
                   //onChange={handleChange}
                 />
                 <div className="italic text-xs text-red-600 pt-1">
-                  {/* {message} */}
+                  {console.log("TEST", regNo.plateno)}
                 </div>
               </div>
               <div className="w-1/2">
@@ -207,7 +199,7 @@ export default function VechicleDetails({ vinData, regNo }) {
                   autofocus
                   required
                   placeholder="Enter plate number"
-                  defaultValue={regNo}
+                  defaultValue={regNo.vin}
                   disabled={disabled}
                   {...register("vin", {
                     required: false,
@@ -236,41 +228,25 @@ export default function VechicleDetails({ vinData, regNo }) {
                   })}
                 />
               </div>
+
               <div className="w-1/2">
                 <label
                   className="font-medium block mb-1 mt-6 text-gray-700"
                   for="username"
                 >
-                  Vehicle Color
+                  Vechicle Year
                 </label>
-                <select
-                  {...register("color", {
+                <input
+                  className="appearance-none border-2 rounded w-full py-2 px-3 leading-tight border-gray-300 focus:outline-none focus:border-indigo-700 focus:bg-white   pr-16 font-mono"
+                  type="text"
+                  autocomplete="off"
+                  autofocus
+                  defaultValue={vinData?.year}
+                  disabled={disabled}
+                  {...register("year", {
                     required: false,
                   })}
-                  disabled={disabled}
-                  className="form-select  
-      block
-      w-full
-      px-3
-      py-2
-      text-base
-      font-normal
-      text-gray-700
-      bg-white bg-clip-padding bg-no-repeat
-      border-2 border-solid border-gray-300
-      rounded
-      transition
-      ease-in-out
-      m-0
-      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  aria-label="Default select example"
-                >
-                  <option selected>Selected</option>
-                  <option value="red">Red</option>
-                  <option value="green">Green</option>
-                  <option value="blue">Blue</option>
-                  <option value="yellow">Yellow</option>
-                </select>
+                />
               </div>
             </div>
             <div className="flex gap-2 px-5 ">
@@ -362,6 +338,7 @@ export default function VechicleDetails({ vinData, regNo }) {
                   className="appearance-none border-2 rounded w-full py-2 px-3 leading-tight border-gray-300 focus:outline-none focus:border-indigo-700 focus:bg-white   pr-16 font-mono"
                   type="text"
                   autocomplete="off"
+                  defaultValue={value?.value}
                   autofocus
                   disabled={disabled}
                   select
@@ -370,20 +347,24 @@ export default function VechicleDetails({ vinData, regNo }) {
                   })}
                 />
               </div>
-              <div className="w-1/2">
-                <label
-                  className="font-medium block mb-1 mt-6 text-gray-700"
-                  for="username"
-                >
-                  Engine Capacity
-                </label>
-                <select
-                  disabled={disabled}
-                  select
-                  {...register("capacity", {
-                    required: false,
-                  })}
-                  className="form-select  
+            </div>
+
+            {showMore && (
+              <div className="flex gap-2 px-5">
+                <div className="w-1/2">
+                  <label
+                    className="font-medium block mb-1 mt-6 text-gray-700"
+                    for="username"
+                  >
+                    Engine Capacity
+                  </label>
+                  <select
+                    disabled={disabled}
+                    select
+                    {...register("capacity", {
+                      required: false,
+                    })}
+                    className="form-select  
       block
       w-full
       px-3
@@ -398,25 +379,83 @@ export default function VechicleDetails({ vinData, regNo }) {
       ease-in-out
       m-0
       focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  aria-label="Default select example"
+                    aria-label="Default select example"
+                  >
+                    <option selected>Selected</option>
+                    <option value="bvn">500</option>
+                  </select>
+                </div>
+                <div className="w-1/2">
+                  <label
+                    className="font-medium block mb-1 mt-6 text-gray-700"
+                    for="username"
+                  >
+                    Vehicle Color
+                  </label>
+                  <select
+                    {...register("color", {
+                      required: false,
+                    })}
+                    disabled={disabled}
+                    className="form-select  
+      block
+      w-full
+      px-3
+      py-2
+      text-base
+      font-normal
+      text-gray-700
+      bg-white bg-clip-padding bg-no-repeat
+      border-2 border-solid border-gray-300
+      rounded
+      transition
+      ease-in-out
+      m-0
+      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    aria-label="Default select example"
+                  >
+                    <option selected>Selected</option>
+                    <option value="red">Red</option>
+                    <option value="green">Green</option>
+                    <option value="blue">Blue</option>
+                    <option value="yellow">Yellow</option>
+                  </select>
+                </div>
+              </div>
+            )}
+            <div className="pt-5 pl-6">
+              <button
+                type="button"
+                onClick={() => setShowMore(!showMore)}
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <option selected>Selected</option>
-                  <option value="bvn">500</option>
-                </select>
-                <div className="text-right py-2">
-                  <div className="inline-flex items-center">
-                    <div>
-                      <button
-                        onClick={handleEdit}
-                        className="bg-[#FFD0371A] text-[#FFD037] font-bold px-3 py-2 rounded"
-                      >
-                        Edit
-                      </button>
-                    </div>
-                    <div className="bg-[#FFD0371A]">
-                      <img src="/editicon.png" />
-                    </div>
-                  </div>
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>{showMore ? "Show Less" : "Show More"}</span>
+              </button>
+            </div>
+            <div className="text-right pr-6 py-2">
+              <div className="inline-flex items-center">
+                <div>
+                  <button
+                    onClick={handleEdit}
+                    className="bg-[#FFD0371A] text-[#FFD037] font-bold px-3 py-2 rounded"
+                  >
+                    Edit
+                  </button>
+                </div>
+                <div className="bg-[#FFD0371A]">
+                  <img src="/editicon.png" />
                 </div>
               </div>
             </div>
@@ -449,6 +488,7 @@ export default function VechicleDetails({ vinData, regNo }) {
                     type="text"
                     autocomplete="off"
                     autofocus
+                    placeholder="Full Name"
                     name="policy_holder"
                     {...register("policy_holder", {
                       required: false,
@@ -559,9 +599,9 @@ export default function VechicleDetails({ vinData, regNo }) {
                     <option value="" selected>
                       State
                     </option>
-                    {statesList?.map((state, idx) => (
-                      <option key={idx} value={state?.name}>
-                        {state?.name}
+                    {NaijaStates.states()?.map((state, idx) => (
+                      <option key={idx} value={state}>
+                        {state}
                       </option>
                     ))}
                   </select>
@@ -596,8 +636,10 @@ export default function VechicleDetails({ vinData, regNo }) {
       focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     aria-label="Default select example"
                   >
-                    <option selected>Selected</option>
-                    {lgaList?.map((lga, i) => (
+                    <option value="" selected>
+                      Selected
+                    </option>
+                    {NaijaStates.lgas(lgaList)?.lgas?.map((lga, i) => (
                       <option value={lga}>{lga}</option>
                     ))}
                   </select>
