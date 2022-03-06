@@ -6,10 +6,14 @@ import { useForm } from "react-hook-form";
 import NaijaStates from "naija-state-local-government";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 const Personaldetails = ({ formData }) => {
   const [disabled, setDisabled] = useState(true);
   const [showForm, setShowForm] = useState(true);
   const [showVechicle, setShowVechicle] = useState(false);
+  const [emailData, setEmailData] = useState();
+  const [addressValue, setAddressValue] = useState(null);
+  const [showAddress, setShowAddress] = useState(false);
   const [regNo, setRegNo] = useState({
     vin: "",
     plateno: "",
@@ -47,9 +51,10 @@ const Personaldetails = ({ formData }) => {
   //     });
   // };
 
-  // useEffect(() => {
-  //   getAllStates();
-  // }, []);
+  useEffect(() => {
+    const userEmail = localStorage.getItem("user");
+    setEmailData(userEmail);
+  }, []);
 
   const onSubmit = (data) => {
     setRegNo({ ...regNo, vin: data.vin, plateno: data.plate_no });
@@ -77,7 +82,7 @@ const Personaldetails = ({ formData }) => {
       email,
       state,
       lga,
-      address,
+      address: addressValue?.label || formData.address,
       title,
     };
     const token = localStorage.getItem("jwt");
@@ -192,7 +197,9 @@ const Personaldetails = ({ formData }) => {
     //     // always executed
     //   });
   };
-
+  const handleAddress = (e) => {
+    setShowAddress(true);
+  };
   return (
     <>
       <div className="inline-flex items-center pl-9">
@@ -242,7 +249,7 @@ const Personaldetails = ({ formData }) => {
                     autofocus
                     readOnly="true"
                     //ref={register}
-                    disabled={disabled}
+
                     {...register("means_of_id", {
                       required: false,
                     })}
@@ -261,7 +268,7 @@ const Personaldetails = ({ formData }) => {
                     type="text"
                     autocomplete="off"
                     autofocus
-                    disabled={disabled}
+                    readOnly
                     {...register("id_code", {
                       required: false,
                     })}
@@ -280,7 +287,7 @@ const Personaldetails = ({ formData }) => {
                     autocomplete="off"
                     autofocus
                     defaultValue="Mr"
-                    disabled={disabled}
+                    readOnly
                     {...register("title", {
                       required: false,
                     })}
@@ -299,7 +306,7 @@ const Personaldetails = ({ formData }) => {
                     autocomplete="off"
                     autofocus
                     defaultValue={formData?.first_name}
-                    disabled={disabled}
+                    readOnly
                     {...register("first_name", {
                       required: false,
                     })}
@@ -318,7 +325,7 @@ const Personaldetails = ({ formData }) => {
                     autocomplete="off"
                     autofocus
                     defaultValue={formData?.last_name}
-                    disabled={disabled}
+                    readOnly
                     {...register("last_name", {
                       required: false,
                     })}
@@ -337,7 +344,7 @@ const Personaldetails = ({ formData }) => {
                     autocomplete="off"
                     autofocus
                     defaultValue={formData?.middle_name}
-                    disabled={disabled}
+                    readOnly
                     {...register("middle_name", {
                       required: false,
                     })}
@@ -357,7 +364,7 @@ const Personaldetails = ({ formData }) => {
                     autocomplete="off"
                     autofocus
                     defaultValue={formData?.phone_number}
-                    disabled={disabled}
+                    readOnly
                     {...register("phone_number", {
                       required: false,
                     })}
@@ -375,8 +382,8 @@ const Personaldetails = ({ formData }) => {
                     type="text"
                     autocomplete="off"
                     autofocus
-                    //defaultValue={}
-                    disabled={disabled}
+                    defaultValue={emailData}
+                    readOnly
                     {...register("email", {
                       required: false,
                     })}
@@ -468,18 +475,34 @@ const Personaldetails = ({ formData }) => {
                   >
                     Address
                   </label>
-                  <input
-                    className="appearance-none border-2 rounded w-full py-2 px-3 leading-tight border-gray-300 focus:outline-none focus:border-indigo-700 focus:bg-white   pr-16 font-mono"
-                    id="username"
-                    type="text"
-                    autocomplete="off"
-                    autofocus
-                    disabled={disabled}
-                    defaultValue={formData?.address}
-                    {...register("address", {
-                      required: false,
-                    })}
-                  />
+                  {showAddress ? (
+                    <GooglePlacesAutocomplete
+                      selectProps={{
+                        addressValue,
+                        onChange: setAddressValue,
+                      }}
+                      apiKey={`${process.env.REACT_APP_GOOGLE_MAP_API}`}
+                      autocompletionRequest={{
+                        componentRestrictions: {
+                          country: ["ng"],
+                        },
+                      }}
+                    />
+                  ) : (
+                    <input
+                      className="appearance-none border-2 rounded w-full py-2 px-3 leading-tight border-gray-300 focus:outline-none focus:border-indigo-700 focus:bg-white   pr-16 font-mono"
+                      id="username"
+                      type="text"
+                      autocomplete="off"
+                      autofocus
+                      disabled={disabled}
+                      onChange={handleAddress}
+                      defaultValue={formData?.address}
+                      // {...register("address", {
+                      //   required: false,
+                      // })}
+                    />
+                  )}
 
                   <div className="text-right py-2">
                     <div className="inline-flex items-center">

@@ -68,7 +68,6 @@ const VechicleDetails = ({ vinData, regNo, value }) => {
       state,
       nin,
       lga,
-      address: addressValue.label || "",
     };
 
     const token = localStorage.getItem("jwt");
@@ -87,7 +86,7 @@ const VechicleDetails = ({ vinData, regNo, value }) => {
       );
       localStorage.setItem("identity", response.data?.identity);
 
-      navigate("/payment");
+      navigate("/checkout");
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -330,7 +329,7 @@ const VechicleDetails = ({ vinData, regNo, value }) => {
                 </select>
               </div>
             </div>
-            <div className="flex gap-2 px-5 ">
+            <div className=" gap-2 px-5 ">
               <div className="w-1/2">
                 <label
                   className="font-medium block mb-2 mt-6 text-gray-700"
@@ -357,6 +356,11 @@ const VechicleDetails = ({ vinData, regNo, value }) => {
                     required: false,
                   })}
                 /> */}
+              </div>
+              <div className="text-3xl pt-7">
+                <h1 className="text-sm">
+                  NIID STATUS: <span>SUCCESSFUL</span>
+                </h1>
               </div>
             </div>
 
@@ -481,7 +485,7 @@ const VechicleDetails = ({ vinData, regNo, value }) => {
           </div>
 
           {/* -------------------------NEW SECTION---------------- */}
-          <div className="pt-8">
+          {/* <div className="pt-8">
             <div className="pb-2">
               <div className="">Policy</div>
             </div>
@@ -682,7 +686,7 @@ const VechicleDetails = ({ vinData, regNo, value }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="px-5 pt-3">
             <button
               //onClick={handleClicked}

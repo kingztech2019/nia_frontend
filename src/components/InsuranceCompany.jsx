@@ -18,13 +18,27 @@ function InsuranceCompany() {
         <div className="pl-2">Select your preferred Insurance Company</div>
       </div>
       <Link to="/identity">
-        <div className="flex gap-1 justify-evenly flex-wrap">
-          {[...new Array(16)].map((d) => (
+        <div className="flex gap-1 gap-y-3 justify-evenly flex-wrap">
+          <div className="bg-white  px-2 py-5 w-1/5 ">
+            <img src="/aiico.svg" />
+          </div>
+          <div className="bg-white  px-2 py-5 w-1/5 ">
+            <img src="/Royal-Exchange.jpg" />
+          </div>
+          <div className="bg-white  px-2 py-5 w-1/5 ">
+            <img src="/chi.png" />
+          </div>
+          <div className="bg-white  px-2 py-5 w-1/5 ">
+            <img src="/ng-mansar-logo.png" />
+          </div>
+        </div>
+        {/* <div className="flex gap-1 pt-2 justify-evenly flex-wrap">
+          {[...new Array(8)].map((d) => (
             <div className="bg-white  px-2 py-5 w-1/5 ">
-              <img src="/ng-mansar-logo.png" />
+              <img src="/chi.png" />
             </div>
           ))}
-        </div>
+        </div> */}
       </Link>
     </NavBar>
   );

@@ -18,6 +18,7 @@ const NavBar = (props) => {
 
   const logOut = () => {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("user");
     navigate("/");
   };
   // const logOut = () => {

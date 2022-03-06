@@ -12,6 +12,7 @@ import SuccessPage from "./components/SuccessPage";
 import MobileScreen from "./components/MobileScreen";
 import axios from "axios";
 import Payment from "./components/Payment";
+import CheckOut from "./components/CheckOut";
 
 function App() {
   const [status, setStatus] = useState();
@@ -52,19 +53,19 @@ function App() {
   //   }
   // }, [statusTimeout]);
 
-  useEffect(() => {
-    // const token = localStorage.getItem("jwt");
-    // if (token) {
-    //   navigate("/home");
-    // }
-    const interval = setInterval(() => {
-      const identityCode = localStorage.getItem("identity");
-      if (identityCode) {
-        getStatus();
-      }
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [idCode]);
+  // useEffect(() => {
+  //   // const token = localStorage.getItem("jwt");
+  //   // if (token) {
+  //   //   navigate("/home");
+  //   // }
+  //   const interval = setInterval(() => {
+  //     const identityCode = localStorage.getItem("identity");
+  //     if (identityCode) {
+  //       getStatus();
+  //     }
+  //   }, 5000);
+  //   return () => clearInterval(interval);
+  // }, [idCode]);
 
   return (
     <Routes>
@@ -79,6 +80,7 @@ function App() {
       <Route exact path="/success" element={<SuccessPage />} />
       <Route exact path="/mobile" element={<MobileScreen />} />
       <Route exact path="/payment" element={<Payment />} />
+      <Route exact path="/checkout" element={<CheckOut />} />
     </Routes>
   );
 }

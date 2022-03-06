@@ -216,7 +216,7 @@ export default function CameraDetails() {
           <div className="lg:pl-20">
             {active == 0 && (
               <div className="pt-3 text-center">
-                <div>Image 1</div>
+                <div className="text-base capitalize">front view</div>
                 <button
                   onClick={takePhotoOne}
                   className="lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -228,7 +228,7 @@ export default function CameraDetails() {
             )}
             {active == 1 && (
               <div className="pt-3">
-                <div>Image 2</div>
+                <div className="text-base capitalize">side view</div>
                 <button
                   onClick={takePhotoTwo}
                   className="w-full bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 -px-4 rounded focus:outline-none focus:shadow-outline"
@@ -240,7 +240,7 @@ export default function CameraDetails() {
             )}
             {active == 2 && (
               <div className="pt-3">
-                <div>Image 3</div>
+                <div className="text-base capitalize">rear view</div>
                 <button
                   onClick={takePhotoThree}
                   className="w-full lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -252,7 +252,7 @@ export default function CameraDetails() {
             )}
             {active == 3 && (
               <div className="pt-3">
-                <div>Image 4</div>
+                <div className="text-base capitalize">vin view</div>
                 <button
                   onClick={takePhotoFour}
                   className="w-full lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"

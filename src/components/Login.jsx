@@ -27,6 +27,7 @@ export default function Login() {
         { ...body }
       );
       localStorage.setItem("jwt", response?.data?.token);
+      localStorage.setItem("user", response?.data?.user.Email);
       navigate("/home");
       setLoading(false);
     } catch (error) {
