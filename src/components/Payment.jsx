@@ -35,18 +35,18 @@ export default function Payment() {
   }, []);
   return (
     <NavBar>
-      <section class="flex flex-col justify-center antialiased  text-gray-600 min-h-screen p-4">
-        <div class="h-full">
-          <div class="max-w-[360px] mx-auto">
-            <div class="bg-white shadow-lg rounded-lg mt-9">
-              <header class="text-center px-5 pb-5">
+      <div className="flex flex-col justify-center antialiased  text-gray-600 -min-h-screen p-4">
+        <div className="h-full">
+          <div className="max-w-[360px] mx-auto">
+            <div className="bg-white shadow-lg rounded-lg mt-9">
+              <header className="text-center px-5 pb-5">
                 <svg
-                  class="inline-flex -mt-9 w-[72px] h-[72px] fill-current rounded-full border-4 border-white box-content shadow mb-3"
+                  className="inline-flex -mt-9 w-[72px] h-[72px] fill-current rounded-full border-4 border-white box-content shadow mb-3"
                   viewBox="0 0 72 72"
                 >
-                  <path class="text-gray-700" d="M0 0h72v72H0z" />
+                  <path className="text-gray-700" d="M0 0h72v72H0z" />
                   <svg
-                    class="w-2 h-2 text-pink-600"
+                    className="w-2 h-2 text-pink-600"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -59,14 +59,14 @@ export default function Payment() {
                     ></path>
                   </svg>
                 </svg>
-                <h3 class="text-xl font-bold text-gray-900 mb-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-1">
                   Payment Invoice
                 </h3>
               </header>
 
-              <div class="text-center px-5 py-6">
+              <div className="text-center px-5 py-6">
                 <div>Total Amount</div>
-                <div class="mb-6">
+                <div className="mb-6">
                   <NumberFormat
                     value={amount}
                     className="text-3xl p-2 font-bold"
@@ -75,14 +75,14 @@ export default function Payment() {
                     prefix={"₦"}
                   />
                 </div>
-                <form class="space-y-3">
-                  <div class="flex shadow-sm rounded"></div>
+                <form className="space-y-3">
+                  <div className="flex shadow-sm rounded"></div>
                   <button
                     onClick={() => {
                       initializePayment(onSuccess, onClose);
                     }}
                     type="button"
-                    class="font-semibold text-sm inline-flex items-center justify-center px-3 py-2 border border-transparent rounded leading-5 shadow transition duration-150 ease-in-out w-full bg-indigo-500 hover:bg-indigo-600 text-white focus:outline-none focus-visible:ring-2"
+                    className="font-semibold text-sm inline-flex items-center justify-center px-3 py-2 border border-transparent rounded leading-5 shadow transition duration-150 ease-in-out w-full bg-indigo-500 hover:bg-indigo-600 text-white focus:outline-none focus-visible:ring-2"
                   >
                     Pay Now
                   </button>
@@ -91,7 +91,7 @@ export default function Payment() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </NavBar>
   );
 }
