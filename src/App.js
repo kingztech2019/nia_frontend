@@ -11,6 +11,7 @@ import CameraDetails from "./components/Camera";
 import SuccessPage from "./components/SuccessPage";
 import MobileScreen from "./components/MobileScreen";
 import axios from "axios";
+import Payment from "./components/Payment";
 
 function App() {
   const [status, setStatus] = useState();
@@ -61,7 +62,7 @@ function App() {
       if (identityCode) {
         getStatus();
       }
-    }, 10000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [idCode]);
 
@@ -77,6 +78,7 @@ function App() {
       <Route exact path="/camera" element={<CameraDetails />} />
       <Route exact path="/success" element={<SuccessPage />} />
       <Route exact path="/mobile" element={<MobileScreen />} />
+      <Route exact path="/payment" element={<Payment />} />
     </Routes>
   );
 }

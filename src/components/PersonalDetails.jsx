@@ -112,6 +112,7 @@ const Personaldetails = ({ formData }) => {
 
           setVinData(JSON.parse(resTwo?.data?.data?.firstcheck));
           setValue(JSON.parse(resTwo?.data?.data?.finalcheck));
+          localStorage.setItem("value", resTwo?.data?.data?.finalcheck);
           //showVinDetails(resTwo?.data);
           setShowForm(false);
           setShowVechicle(true);

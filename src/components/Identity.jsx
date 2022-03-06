@@ -95,7 +95,6 @@ const Identity = () => {
               <div className="w-full px-12 pt-2">
                 <label className="text-gray-700">Means of Identification</label>
                 <select
-                  disabled
                   className="form-select  
       block
       w-full
@@ -117,6 +116,8 @@ const Identity = () => {
                   <option selected value="license">
                     Driver's License
                   </option>
+                  <option value="license">Voter's Card</option>
+                  <option value="license">NIN</option>
                 </select>
               </div>
               <div className="mb-3 w-full px-12 py-3">

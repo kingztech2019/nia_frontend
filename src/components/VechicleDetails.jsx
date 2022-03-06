@@ -4,8 +4,11 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import NaijaStates from "naija-state-local-government";
-export default function VechicleDetails({ vinData, regNo, value }) {
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+import NumberFormat from "react-number-format";
+const VechicleDetails = ({ vinData, regNo, value }) => {
   const navigate = useNavigate();
+  //useScript(`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API}&libraries=places`);
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState();
   const [formData, setFormData] = useState();
@@ -15,6 +18,7 @@ export default function VechicleDetails({ vinData, regNo, value }) {
   const [lgaList, setLgaList] = useState("lagos");
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState(false);
+  const [addressValue, setAddressValue] = useState(null);
   const {
     register,
     handleSubmit,
@@ -64,7 +68,7 @@ export default function VechicleDetails({ vinData, regNo, value }) {
       state,
       nin,
       lga,
-      address,
+      address: addressValue.label || "",
     };
 
     const token = localStorage.getItem("jwt");
@@ -83,7 +87,7 @@ export default function VechicleDetails({ vinData, regNo, value }) {
       );
       localStorage.setItem("identity", response.data?.identity);
 
-      navigate("/mobile");
+      navigate("/payment");
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -329,23 +333,30 @@ export default function VechicleDetails({ vinData, regNo, value }) {
             <div className="flex gap-2 px-5 ">
               <div className="w-1/2">
                 <label
-                  className="font-medium block mb-1 mt-6 text-gray-700"
+                  className="font-medium block mb-2 mt-6 text-gray-700"
                   for="username"
                 >
                   Vehicle Value
                 </label>
-                <input
+                <NumberFormat
+                  value={value?.value}
+                  className="text-2xl border rounded-md border-gray-400 p-2 font-bold"
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₦"}
+                />
+                {/* <input
                   className="appearance-none border-2 rounded w-full py-2 px-3 leading-tight border-gray-300 focus:outline-none focus:border-indigo-700 focus:bg-white   pr-16 font-mono"
                   type="text"
                   autocomplete="off"
-                  defaultValue={value}
+                  defaultValue={}
                   autofocus
                   disabled={disabled}
                   select
                   {...register("value", {
                     required: false,
                   })}
-                />
+                /> */}
               </div>
             </div>
 
@@ -474,6 +485,7 @@ export default function VechicleDetails({ vinData, regNo, value }) {
             <div className="pb-2">
               <div className="">Policy</div>
             </div>
+
             <div className="bg-white">
               <div className="flex gap-2 px-5 ">
                 <div className="w-1/2">
@@ -651,11 +663,18 @@ export default function VechicleDetails({ vinData, regNo, value }) {
                   >
                     Address
                   </label>
-                  <input
-                    className="appearance-none border-2 rounded w-full py-2 px-3 leading-tight border-gray-300 focus:outline-none focus:border-indigo-700 focus:bg-white   pr-16 font-mono"
-                    type="text"
-                    autocomplete="off"
-                    autofocus
+                  <GooglePlacesAutocomplete
+                    selectProps={{
+                      addressValue,
+                      onChange: setAddressValue,
+                    }}
+                    apiKey={`${process.env.REACT_APP_GOOGLE_MAP_API}`}
+                    autocompletionRequest={{
+                      componentRestrictions: {
+                        country: ["ng"],
+                      },
+                    }}
+                    apiOptions={{ region: "NG" }}
                     {...register("address", {
                       required: false,
                     })}
@@ -676,4 +695,5 @@ export default function VechicleDetails({ vinData, regNo, value }) {
       </div>
     </>
   );
-}
+};
+export default VechicleDetails;

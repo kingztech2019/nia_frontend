@@ -1,11 +1,14 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
 import NavBar from "./NavBar";
 import axios from "axios";
-import { Camera } from "react-cam";
+import "./Camera.css";
 import SuccessPage from "./SuccessPage";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+
 export default function CameraDetails() {
+  const navigate = useNavigate();
   const videoRef = useRef(null);
   const phoneRef = useRef(null);
 
@@ -20,6 +23,7 @@ export default function CameraDetails() {
   const [status, setStatus] = useState();
   const [active, setActive] = useState(0);
   const [disabled, setDisabled] = useState(true);
+  const [loading, setLoading] = useState(false);
   // function handleTakePhoto(dataUri) {
   //   // Do stuff with the photo...
   //   console.log(dataUri);
@@ -32,9 +36,9 @@ export default function CameraDetails() {
         video: {
           width: 500,
           height: 500,
-          facingMode: {
-            exact: "environment",
-          },
+          // facingMode: {
+          //   exact: "environment",
+          // },
         },
       })
       .then((stream) => {
@@ -128,6 +132,7 @@ export default function CameraDetails() {
     }
   }, []);
   const postImages = () => {
+    setLoading(true);
     const payload = {
       firstimage: image.firstimage,
       secondimage: image.secondimage,
@@ -151,8 +156,21 @@ export default function CameraDetails() {
           draggable: true,
           progress: undefined,
         });
+        setLoading(false);
+        navigate("/success");
       })
+
       .catch(function (error) {
+        toast.success(error.response?.data?.message, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setLoading(false);
         console.log(error);
       });
   };
@@ -166,145 +184,161 @@ export default function CameraDetails() {
     setDisabled(false);
   };
   return (
-    <NavBar>
-      <div className="lg:px- max-w-screen-sm">
-        <ToastContainer
-          position="bottom-right"
-          autoClose={7000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-        <div className="text-center">
-          <video
-            playsInline={true}
-            className="w-96 h-64"
-            ref={videoRef}
-          ></video>
-        </div>
-        <div className="lg:pl-20">
-          {active == 0 && (
-            <div className="pt-3 text-center">
-              <div>Point 1</div>
-              <button
-                onClick={takePhotoOne}
-                className="lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-              >
-                Click to take a picture
-              </button>
-            </div>
-          )}
-          {active == 1 && (
-            <div className="pt-3">
-              <div>Point 2</div>
-              <button
-                onClick={takePhotoTwo}
-                className="w-full bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 -px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-              >
-                Click to take a picture
-              </button>
-            </div>
-          )}
-          {active == 2 && (
-            <div className="pt-3">
-              <div>Point 3</div>
-              <button
-                onClick={takePhotoThree}
-                className="w-full lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-              >
-                Click to take a picture
-              </button>
-            </div>
-          )}
-          {active == 3 && (
-            <div className="pt-3">
-              <div>Point 4</div>
-              <button
-                onClick={takePhotoFour}
-                className="w-full lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-              >
-                Click to take a picture
-              </button>
-            </div>
-          )}
-        </div>
-
-        <canvas className="hidden" ref={phoneRef}></canvas>
-        <div className="pt-3">
-          {active == 0 && image.firstimage !== "" && (
-            <div>
-              <img
-                className="h-60"
-                src={`data:image/png;base64,${image.firstimage}`}
-              />
-            </div>
-          )}
-          {active == 1 && image.secondimage !== "" && (
-            <div>
-              <img
-                className="h-60 "
-                src={`data:image/png;base64,${image.secondimage}`}
-              />
-            </div>
-          )}
-          {active == 2 && image.thirdimage !== "" && (
-            <div>
-              <img
-                className="h-60 "
-                src={`data:image/png;base64,${image.thirdimage}`}
-              />
-            </div>
-          )}
-          {active == 3 && image.fourthimage !== "" && (
-            <div>
-              <img
-                className="h-60 "
-                src={`data:image/png;base64,${image.fourthimage}`}
-              />
-            </div>
-          )}
-
-          <div className="flex justify-between pt-6">
-            <div>
-              {active !== 0 && (
-                <button className="text-indigo-700" onClick={handleBack}>
-                  Back
-                </button>
-              )}
-            </div>
-
-            <div>
-              {active === 3 ? (
-                <button className="text-indigo-700" onClick={postImages}>
-                  Submit
-                </button>
-              ) : (
-                <button
-                  className="text-indigo-700"
-                  disabled={disabled}
-                  onClick={handleEnable}
-                >
-                  Next
-                </button>
-              )}
+    <>
+      <NavBar>
+        {loading && (
+          <div id="overlay">
+            <div className="text-center font-semibold text-lg" id="text">
+              Processing Images
+              <div className="text-center">Please wait...</div>
             </div>
           </div>
-        </div>
+        )}
+        <div className="lg:px- max-w-screen-sm">
+          <ToastContainer
+            position="bottom-right"
+            autoClose={7000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+          <div className="text-center">
+            <video
+              playsInline={true}
+              className="w-96 h-64"
+              ref={videoRef}
+            ></video>
+          </div>
+          <div className="lg:pl-20">
+            {active == 0 && (
+              <div className="pt-3 text-center">
+                <div>Image 1</div>
+                <button
+                  onClick={takePhotoOne}
+                  className="lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="button"
+                >
+                  Click to take a picture
+                </button>
+              </div>
+            )}
+            {active == 1 && (
+              <div className="pt-3">
+                <div>Image 2</div>
+                <button
+                  onClick={takePhotoTwo}
+                  className="w-full bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 -px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="button"
+                >
+                  Click to take a picture
+                </button>
+              </div>
+            )}
+            {active == 2 && (
+              <div className="pt-3">
+                <div>Image 3</div>
+                <button
+                  onClick={takePhotoThree}
+                  className="w-full lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="button"
+                >
+                  Click to take a picture
+                </button>
+              </div>
+            )}
+            {active == 3 && (
+              <div className="pt-3">
+                <div>Image 4</div>
+                <button
+                  onClick={takePhotoFour}
+                  className="w-full lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="button"
+                >
+                  Click to take a picture
+                </button>
+              </div>
+            )}
+          </div>
 
-        {/* <button >SNAP</button>
+          <canvas className="hidden" ref={phoneRef}></canvas>
+          <div className="pt-3  pb-7">
+            {active == 0 && image.firstimage !== "" && (
+              <div>
+                <img
+                  className="h-60"
+                  src={`data:image/png;base64,${image.firstimage}`}
+                />
+              </div>
+            )}
+            {active == 1 && image.secondimage !== "" && (
+              <div>
+                <img
+                  className="h-60 "
+                  src={`data:image/png;base64,${image.secondimage}`}
+                />
+              </div>
+            )}
+            {active == 2 && image.thirdimage !== "" && (
+              <div>
+                <img
+                  className="h-60 "
+                  src={`data:image/png;base64,${image.thirdimage}`}
+                />
+              </div>
+            )}
+            {active == 3 && image.fourthimage !== "" && (
+              <div>
+                <img
+                  className="h-60 "
+                  src={`data:image/png;base64,${image.fourthimage}`}
+                />
+              </div>
+            )}
+
+            <div className="flex justify-between pt-6">
+              <div>
+                {active !== 0 && (
+                  <button
+                    className="text-indigo-700 text-xl font-bold"
+                    onClick={handleBack}
+                  >
+                    Back
+                  </button>
+                )}
+              </div>
+
+              <div>
+                {active === 3 ? (
+                  <button
+                    className="text-indigo-700 text-xl font-bold"
+                    onClick={postImages}
+                  >
+                    Submit
+                  </button>
+                ) : (
+                  <button
+                    className="text-indigo-700 text-xl font-bold"
+                    disabled={disabled}
+                    onClick={handleEnable}
+                  >
+                    Next
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* <button >SNAP</button>
         <div>
           <canvas ref={phoneRef}></canvas>
           <button>Close</button>
         </div> */}
-      </div>
-    </NavBar>
+        </div>
+      </NavBar>
+    </>
   );
 }
