@@ -32,6 +32,14 @@ function InsuranceCompany() {
             <img src="/ng-mansar-logo.png" />
           </div>
         </div>
+        <div className="flex items-center">
+          <div className="bg-white  px-2 py-5 w-1/5 ">
+            <img src="/test1.png" />
+          </div>
+          <div className="bg-white  px-2 py-5 w-1/5 ">
+            <img src="/test2.png" />
+          </div>
+        </div>
         {/* <div className="flex gap-1 pt-2 justify-evenly flex-wrap">
           {[...new Array(8)].map((d) => (
             <div className="bg-white  px-2 py-5 w-1/5 ">

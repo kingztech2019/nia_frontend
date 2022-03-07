@@ -169,7 +169,7 @@ export default function CheckOut() {
                                     />
                                   </td>
                                   <td class="text-md text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
-                                    Excess buy
+                                    Excess Buy Back
                                   </td>
                                 </tr>
                                 <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
@@ -198,7 +198,7 @@ export default function CheckOut() {
                                     />
                                   </td>
                                   <td class="text-md text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
-                                    Flood cover flood and special risk
+                                    Flood cover and special risk
                                   </td>
                                 </tr>
                                 <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">

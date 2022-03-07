@@ -227,11 +227,11 @@ export default function CameraDetails() {
               </div>
             )}
             {active == 1 && (
-              <div className="pt-3">
+              <div className="pt-3 text-center">
                 <div className="text-base capitalize">side view</div>
                 <button
                   onClick={takePhotoTwo}
-                  className="w-full bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 -px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="lg:w-1/3  bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 -px-4 rounded focus:outline-none focus:shadow-outline"
                   type="button"
                 >
                   Click to take a picture
@@ -239,11 +239,11 @@ export default function CameraDetails() {
               </div>
             )}
             {active == 2 && (
-              <div className="pt-3">
+              <div className="pt-3 text-center">
                 <div className="text-base capitalize">rear view</div>
                 <button
                   onClick={takePhotoThree}
-                  className="w-full lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 -px-4 rounded focus:outline-none focus:shadow-outline"
                   type="button"
                 >
                   Click to take a picture
@@ -251,11 +251,11 @@ export default function CameraDetails() {
               </div>
             )}
             {active == 3 && (
-              <div className="pt-3">
+              <div className="pt-3 text-center">
                 <div className="text-base capitalize">vin view</div>
                 <button
                   onClick={takePhotoFour}
-                  className="w-full lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="lg:w-1/3 bg-indigo-700 hover:bg-indigo-900 text-white font-medium py-2 -px-4 rounded focus:outline-none focus:shadow-outline"
                   type="button"
                 >
                   Click to take a picture
